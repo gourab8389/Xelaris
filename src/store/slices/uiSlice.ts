@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface UIState {
+export interface UIState {
   sidebarOpen: boolean;
   theme: "light" | "dark";
   currentProject: string | null;
