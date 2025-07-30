@@ -9,6 +9,7 @@ import { formatDate } from "../../lib/utils";
 import { MoreVertical, Edit, Trash2 } from "lucide-react";
 import { useCharts } from "../../hooks/useCharts";
 import type { Chart, ChartType } from "../../types";
+import { ChartDownload } from "./ChartDownload";
 
 interface ChartViewerProps {
   chart: Chart;
