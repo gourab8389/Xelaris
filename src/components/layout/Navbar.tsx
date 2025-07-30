@@ -13,6 +13,7 @@ import { getInitials } from "../../lib/utils";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../store/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
+import Logo from "../common/logo";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -36,9 +37,12 @@ export const Navbar = () => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold text-gray-900">
-            Excel Analytics
-          </h1>
+          {/* image logo */}
+          <Logo className="hidden md:block" />
+        </div>
+
+        <div className="flex-1 flex justify-center">
+          <Logo className="md:hidden"/>
         </div>
 
         <div className="flex items-center space-x-4">

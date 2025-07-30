@@ -30,14 +30,14 @@ export const projectsApi = createApi({
       CreateProjectData
     >({
       query: (projectData) => ({
-        url: "/",
+        url: "",
         method: "POST",
         body: projectData,
       }),
       invalidatesTags: ["Projects"],
     }),
     getUserProjects: builder.query<ApiResponse<{ projects: Project[] }>, void>({
-      query: () => "/",
+      query: () => "",
       providesTags: ["Projects"],
     }),
     getProject: builder.query<ApiResponse<{ project: Project }>, string>({

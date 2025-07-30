@@ -22,7 +22,7 @@ export const createProjectSchema = z.object({
 });
 
 export const updateProjectSchema = z.object({
-  name: z.string().min(3, "Project name must be at least 3 characters"),
+  name: z.string().optional(),
   description: z.string().optional(),
 });
 
