@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_SERVER_URL || "https://excel-analytics-serv
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${API_URL}/api/auth`,
+    baseUrl: `${API_URL}/api`,
     prepareHeaders: (headers) => {
       const token = Cookies.get("token");
       if (token) {
@@ -33,7 +33,10 @@ export const authApi = createApi({
       }),
     }),
     getProfile: builder.query<{ success: boolean; data: { user: User } }, void>({
-      query: () => "/profile",
+      query: () => ({
+        url: "/auth/profile",
+        method: "GET",
+      }),
       providesTags: ["User"],
     }),
     getDashboard: builder.query<{ success: boolean; data: DashboardData }, void>({

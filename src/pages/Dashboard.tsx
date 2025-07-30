@@ -24,6 +24,7 @@ export const Dashboard = () => {
   }
 
   const { stats, recentUploads, recentProjects } = data.data;
+  console.log(stats, recentUploads, recentProjects);
 
   return (
     <div className="space-y-8">
