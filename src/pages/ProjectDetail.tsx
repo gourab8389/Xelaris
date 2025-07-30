@@ -43,10 +43,10 @@ export const ProjectDetail = () => {
       {/* Project Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <FolderOpen className="h-8 w-8 text-blue-500" />
+          <FolderOpen className="h-10 w-10 text-blue-500" />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{project?.name}</h1>
-            <div className="flex items-center space-x-2 mt-1">
+            <h1 className="text-xl font-bold text-gray-900">{project?.name}</h1>
+            <div className="flex items-center space-x-2">
               <Badge variant={project?.type === "ORGANIZATION" ? "default" : "secondary"}>
                 {project?.type.toLowerCase()}
               </Badge>
