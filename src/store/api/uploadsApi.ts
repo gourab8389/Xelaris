@@ -28,10 +28,17 @@ export const uploadsApi = createApi({
       { projectId: string; file: File }
     >({
       query: ({ projectId, file }) => {
+        console.log('API call - projectId:', projectId, 'file:', file);
         const formData = new FormData();
         formData.append("file", file);
+        
+        // Log FormData contents
+        for (let pair of formData.entries()) {
+          console.log('FormData entry:', pair[0], pair[1]);
+        }
+        
         return {
-          url: `/${projectId}`,
+          url: `/${projectId}`, // POST /api/uploads/:projectId
           method: "POST",
           body: formData,
         };
@@ -39,16 +46,16 @@ export const uploadsApi = createApi({
       invalidatesTags: ["Uploads"],
     }),
     getUploads: builder.query<ApiResponse<{ uploads: Upload[] }>, string>({
-      query: (projectId) => `/${projectId}`,
+      query: (projectId) => `/${projectId}`, // GET /api/uploads/:projectId
       providesTags: ["Uploads"],
     }),
     getUpload: builder.query<ApiResponse<{ upload: Upload }>, string>({
-      query: (uploadId) => `/file/${uploadId}`,
+      query: (uploadId) => `/file/${uploadId}`, // GET /api/uploads/file/:uploadId
       providesTags: (_, __, uploadId) => [{ type: "Upload", id: uploadId }],
     }),
     deleteUpload: builder.mutation<ApiResponse, string>({
       query: (uploadId) => ({
-        url: `/file/${uploadId}`,
+        url: `/file/${uploadId}`, // DELETE /api/uploads/file/:uploadId
         method: "DELETE",
       }),
       invalidatesTags: ["Uploads"],

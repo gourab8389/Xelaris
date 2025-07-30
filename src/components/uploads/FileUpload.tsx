@@ -25,24 +25,58 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
   const { uploadFile } = useUploads();
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
+    console.log('Files dropped:', { acceptedFiles, rejectedFiles });
+
     // Handle rejected files
     rejectedFiles.forEach(({ file, errors }) => {
+      console.error('Rejected file:', file.name, errors);
       errors.forEach((error: any) => {
         if (error.code === "file-too-large") {
           toast.error(`File ${file.name} is too large. Maximum size is ${formatFileSize(MAX_FILE_SIZE)}`);
         } else if (error.code === "file-invalid-type") {
           toast.error(`File ${file.name} is not a valid Excel file`);
+        } else {
+          toast.error(`File ${file.name}: ${error.message}`);
         }
       });
     });
 
+    // Validate accepted files before adding to state
+    const validFiles = acceptedFiles.filter(file => {
+      if (!file) {
+        console.error('Invalid file object:', file);
+        return false;
+      }
+      if (!file.name || file.name === 'undefined') {
+        console.error('File has no name:', file);
+        toast.error('Invalid file: no filename');
+        return false;
+      }
+      if (!file.size || file.size === 0) {
+        console.error('File has no size:', file);
+        toast.error(`File ${file.name} is empty`);
+        return false;
+      }
+      return true;
+    });
+
     // Add accepted files to upload queue
-    const newFiles: UploadFile[] = acceptedFiles.map((file) => ({
-      ...file,
-      id: Math.random().toString(36).substr(2, 9),
-      progress: 0,
-      status: "pending",
-    }));
+    const newFiles: UploadFile[] = validFiles.map((file) => {
+      const uploadFile = Object.assign(file, {
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        progress: 0,
+        status: "pending" as const,
+      });
+      
+      console.log('Created upload file:', {
+        id: uploadFile.id,
+        name: uploadFile.name,
+        size: uploadFile.size,
+        type: uploadFile.type
+      });
+      
+      return uploadFile;
+    });
 
     setUploadFiles((prev) => [...prev, ...newFiles]);
   }, []);
@@ -58,6 +92,20 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
   });
 
   const uploadSingleFile = async (file: UploadFile) => {
+    console.log('Starting upload for file:', file.name, 'with projectId:', projectId);
+    
+    if (!projectId) {
+      console.error('No projectId available for upload');
+      toast.error('Project ID is missing');
+      return;
+    }
+
+    if (!file || !file.name || file.name === 'undefined') {
+      console.error('Invalid file for upload:', file);
+      toast.error('Invalid file selected');
+      return;
+    }
+
     setUploadFiles((prev) =>
       prev.map((f) =>
         f.id === file.id ? { ...f, status: "uploading", progress: 0 } : f
@@ -76,7 +124,9 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
         );
       }, 200);
 
-      await uploadFile(projectId, file);
+      console.log('Calling uploadFile with:', { projectId, file: file.name });
+      const result = await uploadFile(projectId, file);
+      console.log('Upload result:', result);
 
       clearInterval(progressInterval);
       setUploadFiles((prev) =>
@@ -89,6 +139,7 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
 
       onUploadComplete?.();
     } catch (error: any) {
+      console.error('Upload failed for file:', file.name, error);
       setUploadFiles((prev) =>
         prev.map((f) =>
           f.id === file.id
@@ -106,13 +157,6 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
 
   const removeFile = (fileId: string) => {
     setUploadFiles((prev) => prev.filter((f) => f.id !== fileId));
-  };
-
-  const uploadAllFiles = async () => {
-    const pendingFiles = uploadFiles.filter((f) => f.status === "pending");
-    for (const file of pendingFiles) {
-      await uploadSingleFile(file);
-    }
   };
 
   const getStatusIcon = (status: UploadFile["status"]) => {
@@ -160,14 +204,7 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
       {uploadFiles.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Files to Upload</h3>
-            <Button
-              onClick={uploadAllFiles}
-              disabled={!uploadFiles.some((f) => f.status === "pending")}
-              size="sm"
-            >
-              Upload All
-            </Button>
+            <h3 className="text-lg font-medium">Files to Upload ({uploadFiles.length})</h3>
           </div>
 
           {uploadFiles.map((file) => (
@@ -178,10 +215,10 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
               {getStatusIcon(file.status)}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {file.name}
+                  {file.name || 'Unknown file'}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {formatFileSize(file.size)}
+                  {file.size ? formatFileSize(file.size) : 'Unknown size'}
                 </p>
                 {file.status === "uploading" && (
                   <Progress value={file.progress} className="mt-2" />
@@ -195,6 +232,7 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
                   <Button
                     size="sm"
                     onClick={() => uploadSingleFile(file)}
+                    disabled={!projectId}
                   >
                     Upload
                   </Button>
