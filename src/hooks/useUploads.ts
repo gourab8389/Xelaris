@@ -11,13 +11,6 @@ export const useUploads = () => {
   const [deleteUpload] = useDeleteUploadMutation();
 
   const handleUploadFile = async (projectId: string, file: File) => {
-    console.log('Frontend upload attempt:', { 
-      projectId, 
-      file, 
-      fileName: file?.name, 
-      fileSize: file?.size,
-      fileType: file?.type 
-    });
     
     if (!file) {
       console.error('No file provided to upload function');
@@ -32,9 +25,7 @@ export const useUploads = () => {
     }
     
     try {
-      console.log('Calling upload mutation with:', { projectId, file });
       const result = await uploadFileMutation({ projectId, file }).unwrap();
-      console.log('Upload successful:', result);
       toast.success("File uploaded successfully!");
       return result;
     } catch (error: any) {

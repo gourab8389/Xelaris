@@ -28,14 +28,8 @@ export const uploadsApi = createApi({
       { projectId: string; file: File }
     >({
       query: ({ projectId, file }) => {
-        console.log('API call - projectId:', projectId, 'file:', file);
         const formData = new FormData();
         formData.append("file", file);
-        
-        // Log FormData contents
-        for (let pair of formData.entries()) {
-          console.log('FormData entry:', pair[0], pair[1]);
-        }
         
         return {
           url: `/${projectId}`, // POST /api/uploads/:projectId

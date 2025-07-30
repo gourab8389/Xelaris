@@ -25,7 +25,6 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
   const { uploadFile } = useUploads();
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
-    console.log('Files dropped:', { acceptedFiles, rejectedFiles });
 
     // Handle rejected files
     rejectedFiles.forEach(({ file, errors }) => {
@@ -68,13 +67,6 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
         status: "pending" as const,
       });
       
-      console.log('Created upload file:', {
-        id: uploadFile.id,
-        name: uploadFile.name,
-        size: uploadFile.size,
-        type: uploadFile.type
-      });
-      
       return uploadFile;
     });
 
@@ -92,8 +84,6 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
   });
 
   const uploadSingleFile = async (file: UploadFile) => {
-    console.log('Starting upload for file:', file.name, 'with projectId:', projectId);
-    
     if (!projectId) {
       console.error('No projectId available for upload');
       toast.error('Project ID is missing');
@@ -124,9 +114,7 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
         );
       }, 200);
 
-      console.log('Calling uploadFile with:', { projectId, file: file.name });
       const result = await uploadFile(projectId, file);
-      console.log('Upload result:', result);
 
       clearInterval(progressInterval);
       setUploadFiles((prev) =>
