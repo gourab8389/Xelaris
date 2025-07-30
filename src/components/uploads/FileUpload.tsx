@@ -115,6 +115,7 @@ export const FileUpload = ({ projectId, onUploadComplete }: FileUploadProps) => 
       }, 200);
 
       const result = await uploadFile(projectId, file);
+      console.log('Upload result:', result);
 
       clearInterval(progressInterval);
       setUploadFiles((prev) =>
