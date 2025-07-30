@@ -136,3 +136,8 @@ a {
 :focus-visible {
   @apply outline-2 outline-ring outline-offset-2;
 }
+
+/* scroll bar hide */
+::-webkit-scrollbar {
+  display: none;
+}

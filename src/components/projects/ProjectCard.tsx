@@ -54,7 +54,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link to={`/project/${project.id}/settings`}>
+              <Link to={`/project/${project.id}`}>
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </Link>
