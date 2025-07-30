@@ -32,7 +32,7 @@ export const Navbar = () => {
             variant="ghost"
             size="sm"
             onClick={() => dispatch(toggleSidebar())}
-            className="lg:hidden"
+            className="md:hidden"
           >
             <Menu className="h-5 w-5" />
           </Button>

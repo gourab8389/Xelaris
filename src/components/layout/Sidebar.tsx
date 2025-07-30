@@ -27,7 +27,7 @@ export const Sidebar = () => {
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
+          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 md:hidden"
           onClick={() => dispatch(setSidebarOpen(false))}
         />
       )}
@@ -35,13 +35,13 @@ export const Sidebar = () => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 h-screen",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 h-screen",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Mobile close button */}
-          <div className="flex items-center justify-between p-4 lg:hidden">
+          <div className="flex items-center justify-between p-4 md:hidden">
             <h2 className="text-lg font-semibold">Menu</h2>
             <Button
               variant="ghost"
