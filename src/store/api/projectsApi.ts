@@ -23,7 +23,7 @@ export const projectsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Project", "Projects"],
+  tagTypes: ["Project", "Projects", "Invitation"],
   endpoints: (builder) => ({
     createProject: builder.mutation<
       ApiResponse<{ project: Project }>,
@@ -80,13 +80,40 @@ export const projectsApi = createApi({
         { type: "Project", id: projectId },
       ],
     }),
-    acceptInvitation: builder.mutation<ApiResponse, { token: string }>({
+    getInvitationDetails: builder.query<
+      ApiResponse<{
+        invitation: {
+          email: string;
+          role: string;
+          expiresAt: string;
+          project: {
+            id: string;
+            name: string;
+            description: string;
+            type: string;
+            creator: {
+              firstName: string;
+              lastName: string;
+              email: string;
+            };
+          };
+        };
+      }>,
+      string
+    >({
+      query: (token) => `/invitation/${token}`,
+      providesTags: (_, __, token) => [{ type: "Invitation", id: token }],
+    }),
+    acceptInvitation: builder.mutation<
+      ApiResponse<{ project: Project; role: string }>,
+      { token: string }
+    >({
       query: (data) => ({
         url: "/accept-invitation",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Projects", "Invitation"],
     }),
     removeMember: builder.mutation<
       ApiResponse,
@@ -124,6 +151,7 @@ export const {
   useUpdateProjectMutation,
   useDeleteProjectMutation,
   useInviteUserMutation,
+  useGetInvitationDetailsQuery,
   useAcceptInvitationMutation,
   useRemoveMemberMutation,
   useUpdateMemberRoleMutation,

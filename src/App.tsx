@@ -13,6 +13,7 @@ import { Projects } from "./pages/Projects";
 import { ProjectDetail } from "./pages/ProjectDetail";
 import { UploadDetail } from "./pages/UploadDetail";
 import { Settings } from "./pages/Settings";
+import InvitationPage from "./pages/Invitation";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -34,6 +35,8 @@ function App() {
               {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+
+              <Route path="/invitations/:token" element={<InvitationPage />} />
               
               {/* Protected Routes */}
               <Route

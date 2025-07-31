@@ -50,6 +50,7 @@ export interface Project {
   createdAt: string;
   updatedAt: string;
   creator?: User;
+  invitations?: Invitation[];
   members?: ProjectMember[];
   memberCount?: number;
   uploadCount?: number;

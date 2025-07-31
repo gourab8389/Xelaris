@@ -22,14 +22,20 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      await login(data);
+const onSubmit = async (data: LoginFormData) => {
+  try {
+    await login(data);
+    
+    const { checkAndHandlePendingInvitation } = await import("../../lib/invitationHandler");
+    const hadPendingInvitation = await checkAndHandlePendingInvitation(navigate);
+    
+    if (!hadPendingInvitation) {
       navigate("/dashboard");
-    } catch (error) {
-      // Error is handled in the hook
     }
-  };
+  } catch (error) {
+    // Error is handled in the hook
+  }
+};
 
   return (
     <div className="w-full max-w-md space-y-6">
