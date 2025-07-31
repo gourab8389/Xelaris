@@ -3,9 +3,17 @@ import { DashboardStats } from "../components/dashboard/DashboardStats";
 import { RecentUploads } from "../components/dashboard/RecentUploads";
 import { RecentProjects } from "../components/dashboard/RecentProjects";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
+import { useAuth } from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 export const Dashboard = () => {
   const { data, isLoading, error } = useGetDashboardQuery();
+
+  const { user } = useAuth();
+  // if not authenticated, redirect to login
+  if(!user){
+    return <Navigate to="/login" replace />;
+  }
 
   if (isLoading) {
     return (

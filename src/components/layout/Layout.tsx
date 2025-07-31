@@ -1,8 +1,15 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
+import { useAuth } from "../../hooks/useAuth";
 
 export const Layout = () => {
+  
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
   return (
     <div className="h-screen bg-gray-50">
       <Navbar />
