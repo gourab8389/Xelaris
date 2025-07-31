@@ -101,7 +101,8 @@ export const projectsApi = createApi({
       }>,
       string
     >({
-      query: (token) => `/invitation/${token}`,
+      // Changed from `/invitation/${token}` to `/invitations/${token}` to match the URL in browser
+      query: (token) => `/invitations/${token}`,
       providesTags: (_, __, token) => [{ type: "Invitation", id: token }],
     }),
     acceptInvitation: builder.mutation<
