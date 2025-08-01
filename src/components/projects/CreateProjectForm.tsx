@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useProjects } from "../../hooks/useProjects";
 import { createProjectSchema, type CreateProjectFormData } from "../../lib/validations";
 import { PROJECT_TYPES } from "../../lib/constants";
-import { Plus } from "lucide-react";
+import { ChevronRight, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import type { ProjectType } from "../../types";
 
@@ -120,7 +120,8 @@ export const CreateProjectForm = () => {
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? "Creating..." : "Create Project"}
+              Create
+                {form.formState.isSubmitting ? <Loader2 className="animate-spin"/> : <ChevronRight/>}
               </Button>
             </div>
           </form>
