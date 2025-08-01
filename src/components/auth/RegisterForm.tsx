@@ -15,6 +15,7 @@ import {
 } from "../ui/form";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema, type RegisterFormData } from "../../lib/validations";
+import Logo from "../common/logo";
 
 export const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -51,10 +52,10 @@ export const RegisterForm = () => {
   };
 
   return (
-    <div className="w-full max-w-md space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">Create account</h1>
-        <p className="text-gray-600 mt-2">Sign up to get started</p>
+    <div className="w-full max-w-md space-y-6 border rounded-lg p-5 z-10 bg-white">
+      <div className="flex flex-col items-center text-center justify-center">
+        <Logo />
+        <p className="text-gray-600 mt-2">Sign up to your account</p>
       </div>
 
       <Form {...form}>

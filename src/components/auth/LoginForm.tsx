@@ -8,6 +8,7 @@ import { Input } from "../ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { useAuth } from "../../hooks/useAuth";
 import { loginSchema, type LoginFormData } from "../../lib/validations";
+import Logo from "../common/logo";
 
 export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +39,9 @@ const onSubmit = async (data: LoginFormData) => {
 };
 
   return (
-    <div className="w-full max-w-md space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">Welcome back</h1>
+    <div className="w-full max-w-md space-y-6 border rounded-lg p-5 z-10 bg-white">
+      <div className="flex flex-col items-center text-center justify-center">
+        <Logo />
         <p className="text-gray-600 mt-2">Sign in to your account</p>
       </div>
 
