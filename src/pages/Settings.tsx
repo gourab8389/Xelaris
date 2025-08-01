@@ -134,14 +134,14 @@ export const Settings = () => {
                 <span className="text-sm font-medium">Account ID</span>
               </div>
               <span className="text-sm text-gray-600 font-mono">
-                {user.id.substring(0, 8)}...
+                {user.id}
               </span>
             </div>
           </CardContent>
         </Card>
 
         {/* Security Settings */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Security</CardTitle>
           </CardHeader>
@@ -160,7 +160,7 @@ export const Settings = () => {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Danger Zone */}
         <Card className="border-red-200">

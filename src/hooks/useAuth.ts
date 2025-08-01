@@ -10,9 +10,11 @@ import {
   useLoginMutation,
   useRegisterMutation,
   useGetProfileQuery,
+  useUpdateProfileMutation,
+  useDeleteAccountMutation,
 } from "../store/api/authApi";
 import { toast } from "sonner";
-import type { LoginData, RegisterData } from "../types";
+import type { LoginData, RegisterData, User } from "../types";
 import type { RootState } from "../store";
 
 export const useAuth = () => {
@@ -29,6 +31,8 @@ export const useAuth = () => {
       skip: !isAuthenticated,
     }
   );
+  const [updateProfileMutation] = useUpdateProfileMutation();
+  const [deleteAccountMutation] = useDeleteAccountMutation();
 
   useEffect(() => {
     if (profileData?.success && profileData?.data?.user) {
@@ -66,6 +70,30 @@ export const useAuth = () => {
     }
   };
 
+  const updateProfile = async (userData: Partial<User>) => {
+    try {
+      const result = await updateProfileMutation(userData).unwrap();
+      dispatch(setUser(result.data));
+      toast.success("Profile updated successfully!");
+      return result;
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Profile update failed");
+      throw error;
+    }
+  };
+
+  const deleteAccount = async () => {
+    try {
+      const result = await deleteAccountMutation().unwrap();
+      dispatch(logout());
+      toast.success("Account deleted successfully!");
+      return result;
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Account deletion failed");
+      throw error;
+    }
+  };
+
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully");
@@ -80,5 +108,7 @@ export const useAuth = () => {
     register,
     logout: handleLogout,
     refetchProfile,
+    updateProfile,
+    deleteAccount,
   };
 };

@@ -39,6 +39,21 @@ export const authApi = createApi({
       }),
       providesTags: ["User"],
     }),
+    updateProfile: builder.mutation<{ success: boolean; data: User }, Partial<User>>({
+      query: (userData) => ({
+        url: "/auth/profile",
+        method: "PUT",
+        body: userData,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    deleteAccount: builder.mutation<{ success: boolean; message: string }, void>({
+      query: () => ({
+        url: "/auth/profile",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
     getDashboard: builder.query<{ success: boolean; data: DashboardData }, void>({
       query: () => ({
         url: "/users/dashboard",
@@ -53,5 +68,7 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useGetProfileQuery,
+  useUpdateProfileMutation,
+  useDeleteAccountMutation,
   useGetDashboardQuery,
 } = authApi;
