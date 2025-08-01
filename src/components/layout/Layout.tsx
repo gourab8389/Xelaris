@@ -11,7 +11,7 @@ export const Layout = () => {
   }
   
   return (
-    <div className="h-screen bg-gray-50">
+    <div className="h-screen">
       <Navbar />
       <div className="flex">
         <Sidebar />

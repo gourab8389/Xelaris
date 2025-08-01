@@ -61,11 +61,11 @@ export const ChartViewer = ({ chart, onEdit }: ChartViewerProps) => {
   const renderChart = () => {
     if (!isValidChart) {
       return (
-        <div className="flex items-center justify-center h-64 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+        <div className="flex items-center justify-center h-64 text-gray-500 bg-gray-50 dark:bg-gray-900 rounded-lg border-2 border-dashed border-gray-300">
           <div className="text-center p-6">
             <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Invalid Chart Data</h3>
-            <p className="text-gray-500 mb-4">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Invalid Chart Data</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">
               The chart data is missing or invalid. Please check:
             </p>
             <ul className="text-sm text-gray-600 text-left space-y-1">
@@ -153,7 +153,7 @@ export const ChartViewer = ({ chart, onEdit }: ChartViewerProps) => {
           </div>
           
           {isValidChart && (
-            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
               <div className="text-sm text-gray-600 space-y-1">
                 <div className="flex justify-between">
                   <span className="font-medium">Y-Axis:</span>

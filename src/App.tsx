@@ -14,6 +14,7 @@ import { ProjectDetail } from "./pages/ProjectDetail";
 import { UploadDetail } from "./pages/UploadDetail";
 import { Settings } from "./pages/Settings";
 import InvitationPage from "./pages/Invitation";
+import { ThemeProvider } from "./components/common/theme-provider";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -29,6 +30,7 @@ function App() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Router>
           <div className="App">
             <Routes>
@@ -66,6 +68,7 @@ function App() {
             <ReactQueryDevtools initialIsOpen={false} />
           </div>
         </Router>
+        </ThemeProvider>
       </QueryClientProvider>
     </Provider>
   );

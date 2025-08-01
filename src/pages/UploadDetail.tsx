@@ -44,7 +44,7 @@ export const UploadDetail = () => {
         <div className="flex items-center space-x-4">
           <FileText className="h-8 w-8 text-blue-500" />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{upload?.originalName}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{upload?.originalName}</h1>
             <div className="flex items-center space-x-2 mt-1">
               <Badge className={getStatusColor(upload?.status ?? "")}>
                 {upload?.status.toLowerCase()}
@@ -76,12 +76,12 @@ export const UploadDetail = () => {
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full border border-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     {excelData.headers.map((header, index) => (
                       <th
                         key={index}
-                        className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b"
+                        className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-muted-foreground uppercase border-b"
                       >
                         {header}
                       </th>
@@ -92,7 +92,7 @@ export const UploadDetail = () => {
                   {excelData.rows.slice(0, 5).map((row: any, index) => (
                     <tr key={index} className="border-b">
                       {excelData.headers.map((header, colIndex) => (
-                        <td key={colIndex} className="px-4 py-2 text-sm text-gray-900">
+                        <td key={colIndex} className="px-4 py-2 text-sm text-gray-900 dark:text-gray-300">
                           {row[header]?.toString() || "-"}
                         </td>
                       ))}

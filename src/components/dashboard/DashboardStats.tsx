@@ -41,8 +41,8 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
                 <item.icon className={`h-6 w-6 ${item.color}`} />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">{item.name}</p>
-                <p className="text-2xl font-bold text-gray-900">{item.value}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-white">{item.name}</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-600">{item.value}</p>
               </div>
             </div>
           </CardContent>
