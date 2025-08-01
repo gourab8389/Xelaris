@@ -38,21 +38,38 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
 
   const prepareChartData = () => {
     const { data, config } = chart;
-    const chartData = data.chartData || [];
+    
+    // Check if we have chartConfig (pre-processed data from API)
+    if (data?.chartConfig?.data) {
+      return data.chartConfig.data;
+    }
+    
+    // Fallback to processing chartData
+    const chartData = data?.chartData || [];
 
     if (!chartData.length) {
       return { labels: [], datasets: [] };
     }
 
-    const labels = chartData.map((item: any) => item[config.xAxis]);
-    const values = chartData.map((item: any) => item[config.yAxis]);
-
+    // For PIE charts, we need to process the data differently
     if (chart.type === CHART_TYPES.PIE) {
+      // Count occurrences of each category
+      const categoryCount: { [key: string]: number } = {};
+      chartData.forEach((item: any) => {
+        const category = item[config.xAxis] || item.x || item.label;
+        if (category) {
+          categoryCount[category] = (categoryCount[category] || 0) + 1;
+        }
+      });
+
+      const labels = Object.keys(categoryCount);
+      const values = Object.values(categoryCount);
+
       return {
         labels,
         datasets: [
           {
-            label: config.yAxis,
+            label: config.yAxis || config.xAxis,
             data: values,
             backgroundColor: labels.map(() => generateRandomColor()),
             borderWidth: 1,
@@ -61,14 +78,24 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
       };
     }
 
+    // For other chart types
+    const labels = chartData.map((item: any) => 
+      item[config.xAxis] || item.x || item.label || 'Unknown'
+    );
+    
+    const values = chartData.map((item: any) => {
+      const value = item[config.yAxis] || item.y;
+      return typeof value === 'number' ? value : 1; // Default to 1 if not a number
+    });
+
     if (chart.type === CHART_TYPES.SCATTER) {
       return {
         datasets: [
           {
             label: `${config.xAxis} vs ${config.yAxis}`,
             data: chartData.map((item: any) => ({
-              x: item[config.xAxis],
-              y: item[config.yAxis],
+              x: item[config.xAxis] || item.x || 0,
+              y: item[config.yAxis] || item.y || 0,
             })),
             backgroundColor: generateRandomColor(),
             borderColor: generateRandomColor(),
@@ -81,9 +108,11 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
       labels,
       datasets: [
         {
-          label: config.yAxis,
+          label: config.yAxis || 'Value',
           data: values,
-          backgroundColor: generateRandomColor(),
+          backgroundColor: chart.type === CHART_TYPES.LINE 
+            ? generateRandomColor() 
+            : labels.map(() => generateRandomColor()),
           borderColor: generateRandomColor(),
           borderWidth: 1,
           tension: chart.type === CHART_TYPES.LINE ? 0.4 : undefined,
@@ -103,6 +132,9 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
         title: {
           display: !!chart.config.title,
           text: chart.config.title,
+        },
+        tooltip: {
+          enabled: true,
         },
       },
     };
@@ -144,6 +176,7 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
               display: true,
               text: chart.config.yAxis,
             },
+            beginAtZero: true,
           },
         },
       };
@@ -156,6 +189,23 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
     const data = prepareChartData();
     const options = getChartOptions();
 
+    // Debug logging
+    console.log('Chart Type:', chart.type);
+    console.log('Chart Data:', data);
+    console.log('Chart Options:', options);
+
+    // Check if we have valid data
+    if (!data.labels?.length && !data.datasets?.length) {
+      return (
+        <div className="flex items-center justify-center h-64 text-gray-500 bg-gray-50 rounded-lg">
+          <div className="text-center">
+            <p className="text-lg font-medium">No data available</p>
+            <p className="text-sm">Please check your data source</p>
+          </div>
+        </div>
+      );
+    }
+
     switch (chart.type) {
       case CHART_TYPES.BAR:
         return <Bar ref={chartRef} data={data} options={options} height={height} />;
@@ -166,12 +216,19 @@ export const Chart2D = ({ chart, height = 400 }: Chart2DProps) => {
       case CHART_TYPES.SCATTER:
         return <Scatter ref={chartRef} data={data} options={options} height={height} />;
       default:
-        return <div className="flex items-center justify-center h-64 text-gray-500">Unsupported chart type</div>;
+        return (
+          <div className="flex items-center justify-center h-64 text-gray-500 bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <p className="text-lg font-medium">Unsupported chart type: {chart.type}</p>
+              <p className="text-sm">Please select a different chart type</p>
+            </div>
+          </div>
+        );
     }
   };
 
   return (
-    <div className="w-full" style={{ height: `${height}px` }}>
+    <div className="w-full bg-white rounded-lg p-4" style={{ height: `${height}px` }}>
       {renderChart()}
     </div>
   );

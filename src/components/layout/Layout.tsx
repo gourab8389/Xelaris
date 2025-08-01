@@ -5,8 +5,8 @@ import { useAuth } from "../../hooks/useAuth";
 
 export const Layout = () => {
   
-  const { user } = useAuth();
-  if (!user) {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   

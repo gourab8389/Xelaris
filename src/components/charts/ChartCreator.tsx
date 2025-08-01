@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useCharts } from "../../hooks/useCharts";
 import { createChartSchema, type CreateChartFormData, } from "../../lib/validations";
 import { CHART_TYPES, CHART_TYPE_LABELS } from "../../lib/constants";
-import { Plus } from "lucide-react";
+import { ChevronRight, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import type { ChartType, ExcelData } from "../../types";
 
@@ -195,7 +195,8 @@ export const ChartCreator = ({ uploadId, excelData, onChartCreated }: ChartCreat
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? "Creating..." : "Create Chart"}
+                Create Chart
+                {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <ChevronRight />}
               </Button>
             </div>
           </form>
