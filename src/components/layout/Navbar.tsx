@@ -1,4 +1,4 @@
-import { Menu, Bell, Settings, LogOut, User } from "lucide-react";
+import { Menu, Bell, LogOut, User } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -80,10 +80,6 @@ export const Navbar = () => {
               <DropdownMenuItem onClick={() => navigate("/settings")}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/settings")}>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
