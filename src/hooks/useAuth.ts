@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   setCredentials,
   logout,
@@ -19,20 +20,22 @@ import type { RootState } from "../store";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, token, isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
   );
 
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
-  const { data: profileData, refetch: refetchProfile } = useGetProfileQuery(
-    undefined,
-    {
-      skip: !isAuthenticated,
-    }
-  );
-  const [updateProfileMutation] = useUpdateProfileMutation();
-  const [deleteAccountMutation] = useDeleteAccountMutation();
+  const { 
+    data: profileData, 
+    refetch: refetchProfile,
+    isLoading: isProfileLoading 
+  } = useGetProfileQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const [updateProfileMutation, { isLoading: isUpdating }] = useUpdateProfileMutation();
+  const [deleteAccountMutation, { isLoading: isDeleting }] = useDeleteAccountMutation();
 
   useEffect(() => {
     if (profileData?.success && profileData?.data?.user) {
@@ -70,11 +73,11 @@ export const useAuth = () => {
     }
   };
 
-  const updateProfile = async (userData: Partial<User>) => {
+  const updateProfile = async (userData: Partial<Pick<User, 'firstName' | 'lastName'>>) => {
     try {
       const result = await updateProfileMutation(userData).unwrap();
-      dispatch(setUser(result.data));
-      toast.success("Profile updated successfully!");
+      // User data will be updated automatically via RTK Query cache
+      toast.success(result.message || "Profile updated successfully!");
       return result;
     } catch (error: any) {
       toast.error(error?.data?.message || "Profile update failed");
@@ -82,28 +85,32 @@ export const useAuth = () => {
     }
   };
 
-  const deleteAccount = async () => {
+  const deleteAccount = useCallback(async () => {
     try {
       const result = await deleteAccountMutation().unwrap();
       dispatch(logout());
-      toast.success("Account deleted successfully!");
+      toast.success(result.message || "Account deleted successfully!");
+      navigate("/login", { replace: true });
       return result;
     } catch (error: any) {
       toast.error(error?.data?.message || "Account deletion failed");
       throw error;
     }
-  };
+  }, [deleteAccountMutation, dispatch, navigate]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     dispatch(logout());
     toast.success("Logged out successfully");
-  };
+    navigate("/login", { replace: true });
+  }, [dispatch, navigate]);
 
   return {
     user,
     token,
     isAuthenticated,
-    isLoading,
+    isLoading: isLoading || isProfileLoading,
+    isUpdating,
+    isDeleting,
     login,
     register,
     logout: handleLogout,

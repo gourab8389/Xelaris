@@ -14,6 +14,11 @@ export const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+export const updateProfileSchema = z.object({
+  firstName: z.string().min(2, "First name must be at least 2 characters").optional(),
+  lastName: z.string().min(2, "Last name must be at least 2 characters").optional(),
+});
+
 // Project validations
 export const createProjectSchema = z.object({
   name: z.string().min(3, "Project name must be at least 3 characters"),
@@ -71,3 +76,5 @@ export type CreateProjectFormData = z.infer<typeof createProjectSchema>;
 export type UpdateProjectFormData = z.infer<typeof updateProjectSchema>;
 export type InviteUserFormData = z.infer<typeof inviteUserSchema>;
 export type CreateChartFormData = z.infer<typeof createChartSchema>;
+export type FileUploadFormData = z.infer<typeof fileUploadSchema>;
+export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

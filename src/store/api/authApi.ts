@@ -24,6 +24,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
+      invalidatesTags: ["User"],
     }),
     register: builder.mutation<AuthResponse, RegisterData>({
       query: (userData) => ({
@@ -31,6 +32,7 @@ export const authApi = createApi({
         method: "POST",
         body: userData,
       }),
+      invalidatesTags: ["User"],
     }),
     getProfile: builder.query<{ success: boolean; data: { user: User } }, void>({
       query: () => ({
@@ -39,20 +41,38 @@ export const authApi = createApi({
       }),
       providesTags: ["User"],
     }),
-    updateProfile: builder.mutation<{ success: boolean; data: User }, Partial<User>>({
+    updateProfile: builder.mutation<
+      { success: boolean; message: string; data: { user: User } }, 
+      Partial<Pick<User, 'firstName' | 'lastName'>>
+    >({
       query: (userData) => ({
         url: "/auth/profile",
         method: "PUT",
         body: userData,
       }),
       invalidatesTags: ["User"],
+      // Optimistic update
+      async onQueryStarted(patch, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          authApi.util.updateQueryData('getProfile', undefined, (draft) => {
+            if (draft.data?.user) {
+              Object.assign(draft.data.user, patch);
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     deleteAccount: builder.mutation<{ success: boolean; message: string }, void>({
       query: () => ({
-        url: "/auth/profile",
+        url: "/auth/delete",
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Dashboard"],
     }),
     getDashboard: builder.query<{ success: boolean; data: DashboardData }, void>({
       query: () => ({
