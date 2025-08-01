@@ -1,4 +1,4 @@
-import { Menu, Bell, LogOut, User } from "lucide-react";
+import { Menu, LogOut, User } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../store/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
 import Logo from "../common/logo";
+import { ModeToggle } from "../common/mode-toggle";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -46,9 +47,7 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm">
-            <Bell className="h-5 w-5" />
-          </Button>
+          <ModeToggle/>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
