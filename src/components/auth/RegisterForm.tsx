@@ -2,12 +2,19 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { ChevronRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { useAuth } from "../../hooks/useAuth";
-import { registerSchema, type RegisterFormData, } from "../../lib/validations";
+import { registerSchema, type RegisterFormData } from "../../lib/validations";
 
 export const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,20 +31,24 @@ export const RegisterForm = () => {
     },
   });
 
-const onSubmit = async (data: RegisterFormData) => {
-  try {
-    await register(data);
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      await register(data);
 
-    const { checkAndHandlePendingInvitation } = await import("../../lib/invitationHandler");
-    const hadPendingInvitation = await checkAndHandlePendingInvitation(navigate);
-    
-    if (!hadPendingInvitation) {
-      navigate("/dashboard");
+      const { checkAndHandlePendingInvitation } = await import(
+        "../../lib/invitationHandler"
+      );
+      const hadPendingInvitation = await checkAndHandlePendingInvitation(
+        navigate
+      );
+
+      if (!hadPendingInvitation) {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      // Error is handled in the hook
     }
-  } catch (error) {
-    // Error is handled in the hook
-  }
-};
+  };
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -56,10 +67,7 @@ const onSubmit = async (data: RegisterFormData) => {
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter first name"
-                      {...field}
-                    />
+                    <Input placeholder="Enter first name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -73,10 +81,7 @@ const onSubmit = async (data: RegisterFormData) => {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter last name"
-                      {...field}
-                    />
+                    <Input placeholder="Enter last name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,7 +141,12 @@ const onSubmit = async (data: RegisterFormData) => {
           />
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Creating account..." : "Create account"}
+            Register
+            {isLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <ChevronRight />
+            )}
           </Button>
         </form>
       </Form>
