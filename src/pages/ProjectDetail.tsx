@@ -54,9 +54,10 @@ export const ProjectDetail = () => {
   const [updatingRoleForMember, setUpdatingRoleForMember] = useState<
     string | null
   >(null);
+  const [deletingUploadId, setDeletingUploadId] = useState<string | null>(null);
   const { projectId } = useParams<{ projectId: string }>();
   const { useGetProjectQuery, removeMember, updateMemberRole } = useProjects();
-  const { useGetUploadsQuery } = useUploads();
+  const { useGetUploadsQuery, deleteUpload } = useUploads();
 
   const { data: projectData, isLoading: isProjectLoading } = useGetProjectQuery(
     projectId!
@@ -112,6 +113,17 @@ export const ProjectDetail = () => {
       console.error("Error updating member role:", error);
     } finally {
       setUpdatingRoleForMember(null);
+    }
+  };
+
+  const deleteUploadHandler = async (uploadId: string) => {
+    setDeletingUploadId(uploadId);
+    try {
+      await deleteUpload(uploadId);
+      refetchUploads();
+    } catch (error) {
+    } finally {
+      setDeletingUploadId(null);
     }
   };
 
@@ -230,6 +242,18 @@ export const ProjectDetail = () => {
                               {upload._count.charts}
                             </div>
                           )}
+                          {upload.userId === currentUserId && (
+                            <Button
+                              variant="destructive"
+                              size="icon"
+                              onClick={() => {
+                                deleteUploadHandler(upload.id);
+                              }}
+                              disabled={deletingUploadId === upload.id}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -277,7 +301,7 @@ export const ProjectDetail = () => {
                               </span>
                             </div>
                             {project?.creator &&
-                              project.creator.id === currentUserId &&
+                              project.creator.id === currentUserId && // Only show to project creator
                               project.creator.id !== member.user.id && (
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
@@ -330,6 +354,7 @@ export const ProjectDetail = () => {
                               )}
                             {/* creator can't delete ownself but can delete others */}
                             {project?.creator &&
+                              project.creator.id === currentUserId && // Only show to project creator
                               project.creator.id !== member.user.id && (
                                 <Button
                                   variant="destructive"
