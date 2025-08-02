@@ -29,7 +29,7 @@ export const Projects = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Projects</h1>
           <p className="text-gray-600 mt-2">Manage your Excel analytics projects</p>
         </div>
         <CreateProjectForm />
