@@ -74,7 +74,7 @@ export const UploadDetail = () => {
             <div className="text-sm text-gray-600 mb-4">
               {excelData.metadata.totalRows} rows × {excelData.metadata.totalColumns} columns
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto overflow-y-auto max-h-76">
               <table className="min-w-full border border-gray-200">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
@@ -89,7 +89,7 @@ export const UploadDetail = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {excelData.rows.slice(0, 5).map((row: any, index) => (
+                  {excelData.rows.map((row: any, index) => (
                     <tr key={index} className="border-b">
                       {excelData.headers.map((header, colIndex) => (
                         <td key={colIndex} className="px-4 py-2 text-sm text-gray-900 dark:text-gray-300">
@@ -103,7 +103,7 @@ export const UploadDetail = () => {
             </div>
             {excelData.rows.length > 5 && (
               <p className="text-sm text-gray-500 mt-2">
-                Showing first 5 rows of {excelData.rows.length} total rows
+                Showing {excelData.rows.length} total rows
               </p>
             )}
           </CardContent>
