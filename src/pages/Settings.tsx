@@ -13,7 +13,6 @@ import { Separator } from "../components/ui/separator";
 import { getInitials, formatDate } from "../lib/utils";
 import {
   User,
-  Mail,
   Calendar,
   Shield,
   Loader2,
@@ -251,26 +250,6 @@ export const Settings = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between py-2">
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm font-medium">
-                    Email Verification
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {user.isVerified ? (
-                    <span className="text-sm text-green-600 bg-green-100 px-2 py-1 rounded">
-                      Verified
-                    </span>
-                  ) : (
-                    <span className="text-sm text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
-                      Not Verified
-                    </span>
-                  )}
-                </div>
-              </div>
-
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center space-x-3">
                   <Calendar className="h-4 w-4 text-gray-500" />
