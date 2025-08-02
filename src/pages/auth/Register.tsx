@@ -5,7 +5,7 @@ export const Register = () => {
     <div className="h-screen flex items-center md:justify-between justify-center">
       <div className="w-1/2 md:flex hidden bg-blue-300 h-full items-center justify-center">
         <img
-          src="/auth.png"
+          src="/auth.jpg"
           alt="Background"
           className="w-full h-full object-cover"
         />

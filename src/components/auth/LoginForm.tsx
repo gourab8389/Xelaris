@@ -39,7 +39,7 @@ const onSubmit = async (data: LoginFormData) => {
 };
 
   return (
-    <div className="w-full max-w-md space-y-6 border rounded-lg p-5 z-10 bg-white">
+    <div className="w-full max-w-md space-y-6 border rounded-lg p-5 z-10 bg-white dark:bg-gray-900">
       <div className="flex flex-col items-center text-center justify-center">
         <Logo />
         <p className="text-gray-600 mt-2">Sign in to your account</p>
