@@ -1,4 +1,4 @@
-9# Xelaris(Excel Analytics Platform) - Frontend
+Xelaris(Excel Analytics Platform) - Frontend
 
 A powerful React-based frontend for uploading Excel files, analyzing data, and generating interactive 2D and 3D charts with role-based collaboration features.
 
